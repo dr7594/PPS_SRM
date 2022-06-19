@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+struct data
+{
+    char reg[15];
+    char name[20];
+    float marks[3];
+} K1_students[70];
+
+int ind(char str[])
+{   char reg1[15];
+	for (int i=0 ;i<4;i++){
+		strncpy(reg1,K1_students[i].reg,15);
+		if (strcmp(str,reg1)==0)
+			return i;}
+	return -1;}
+
+float pps_Marks(char reg[]){
+	return K1_students[ind(reg)].marks[0];}
+float chem_Marks(char reg[]){
+	return K1_students[ind(reg)].marks[1];}
+float maths_Marks(char reg[]){
+	return K1_students[ind(reg)].marks[2];}
+
+int main(void) {
+    FILE *fptr;
+    fptr=fopen("C:\\test.txt", "r");
+
+    if(fptr==NULL)
+        printf("Error Opening File");
+    int students;
+    printf("No Of Students : ");
+    scanf("%d",&students);
+    for (int i=0 ;i<students;i++)
+    {fscanf(fptr,"%s %s %f %f %f", K1_students[i].reg,K1_students[i].name ,&K1_students[i].marks[0],&K1_students[i].marks[1],&K1_students[i].marks[2] );}
+
+
+	int ch;
+	char reg[15];
+	float(*k1_class[])(char[])={pps_Marks,chem_Marks,maths_Marks};
+	printf("SUBJECT LIST : \n 0 - PPS \n 1 - Chem \n 2 - Maths\n");
+
+	scanf("%d",&ch);
+	printf("\nEnter Reg Number : ");
+	scanf("%s",reg);
+	float marks=0;
+	if (ch<3){
+		marks=(*k1_class[ch])(reg);}
+	printf("\nREQUIRED MARKS - SUB CODE %d : %.2f\n",ch,marks);
+	fclose(fptr);
+	return 0;
+}
